@@ -72,3 +72,35 @@ export const asset = pgTable('asset', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
+
+export const module = pgTable('module', {
+  id: text('id').primaryKey(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  order: integer('order').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+})
+
+export const lesson = pgTable('lesson', {
+  id: text('id').primaryKey(),
+  moduleId: text('module_id')
+    .notNull()
+    .references(() => module.id, { onDelete: 'cascade' }),
+  title: text('title').notNull(),
+  content: text('content').notNull(), // Markdown content
+  order: integer('order').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+})
+
+export const userProgress = pgTable('user_progress', {
+  id: text('id').primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  lessonId: text('lesson_id')
+    .notNull()
+    .references(() => lesson.id, { onDelete: 'cascade' }),
+  completedAt: timestamp('completed_at').notNull().defaultNow(),
+})

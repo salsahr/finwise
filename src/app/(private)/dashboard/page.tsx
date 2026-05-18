@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { getAssets } from "@/app/actions/assets"
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { Wallet, PieChart, TrendingUp, ArrowRight, Activity, DollarSign, Briefcase, BarChart2, Sparkles } from 'lucide-react'
+import { Wallet, PieChart, TrendingUp, ArrowRight, Activity, DollarSign, Briefcase, BarChart2, Sparkles, BookOpen } from 'lucide-react'
 
 export default async function DashboardPage() {
   const assets = await getAssets()
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
         </Card>
 
         {/* Gráficos com IA Card */}
-        <Card className="hover:border-amber-500/50 transition-colors duration-300 group overflow-hidden relative lg:col-span-1 md:col-span-2">
+        <Card className="hover:border-amber-500/50 transition-colors duration-300 group overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 relative z-10">
             <CardTitle className="text-sm font-medium text-muted-foreground">Análise com IA</CardTitle>
@@ -103,14 +103,40 @@ export default async function DashboardPage() {
           <CardContent className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <BarChart2 className="h-6 w-6 text-amber-500" />
-              <span className="text-lg font-bold">Gráficos Históricos</span>
+              <span className="text-lg font-bold">Gráficos</span>
             </div>
             <p className="text-sm text-muted-foreground mb-3">
-              Visualize a evolução dos seus ativos com explicações em IA
+              Visualize a evolução e explicações
             </p>
             <Link href="/dashboard/graficos">
-              <Button size="sm" variant="outline" className="group/btn border-amber-500/30 hover:border-amber-500 hover:bg-amber-500/10 hover:text-amber-600 text-xs">
+              <Button size="sm" variant="outline" className="group/btn border-amber-500/30 hover:border-amber-500 hover:bg-amber-500/10 hover:text-amber-600 text-xs w-full">
                 Abrir Gráficos
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5 group-hover/btn:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Aprender Card */}
+        <Card className="hover:border-emerald-500/50 transition-colors duration-300 group overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 relative z-10">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Aprender</CardTitle>
+            <div className="p-2 bg-emerald-500/10 rounded-full">
+              <Activity className="h-4 w-4 text-emerald-500" />
+            </div>
+          </CardHeader>
+          <CardContent className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <BookOpen className="h-6 w-6 text-emerald-500" />
+              <span className="text-lg font-bold">Módulos</span>
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">
+              Estude com o Tutor de IA
+            </p>
+            <Link href="/dashboard/learn">
+              <Button size="sm" variant="outline" className="group/btn border-emerald-500/30 hover:border-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-600 text-xs w-full">
+                Começar
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5 group-hover/btn:translate-x-1 transition-transform" />
               </Button>
             </Link>
