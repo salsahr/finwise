@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { NewsCarousel } from '@/components/news-carousel'
 
 export default async function PrivateLayout({
   children,
@@ -15,5 +16,10 @@ export default async function PrivateLayout({
     redirect('/sign-in')
   }
 
-  return <>{children}</>
+  return (
+    <div className="flex flex-col min-h-screen">
+      <NewsCarousel />
+      {children}
+    </div>
+  )
 }
