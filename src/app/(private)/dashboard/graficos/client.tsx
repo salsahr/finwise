@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useExchangeRates } from '@/components/exchange-rates'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -222,6 +223,8 @@ export function GraficosClient({ userAssets }: { userAssets: UserAsset[] }) {
     '/api/ai/chart-assistant'
   )
 
+  const { convertToReal } = useExchangeRates()
+
   const chartSummary = chartData ? buildChartSummary(chartData) : ''
 
   const fetchChart = useCallback(async (ticker: string, p: string) => {
@@ -397,6 +400,11 @@ export function GraficosClient({ userAssets }: { userAssets: UserAsset[] }) {
                         currency: chartData.currency === 'USD' ? 'USD' : 'BRL',
                       }).format(chartData.currentPrice)}
                     </div>
+                    {chartData.currency === 'USD' && (
+                      <div className="text-sm text-muted-foreground font-medium mt-0.5">
+                        ≈ {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(convertToReal(chartData.currentPrice, 'USD'))}
+                      </div>
+                    )}
                     <div className={`flex items-center justify-end gap-1 mt-1 font-semibold text-sm ${trendColor}`}>
                       <TrendIcon className="h-4 w-4" />
                       {trendPct >= 0 ? '+' : ''}{trendPct.toFixed(2)}% no período
@@ -430,18 +438,19 @@ export function GraficosClient({ userAssets }: { userAssets: UserAsset[] }) {
                     <XAxis
                       dataKey="date"
                       tickFormatter={(val) => formatAxisDate(val, period)}
-                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                      tick={{ fontSize: 11, fill: '#9ca3af' }}
                       tickLine={false}
                       axisLine={false}
                       interval="preserveStartEnd"
+                      minTickGap={40}
                     />
                     <YAxis
                       domain={['auto', 'auto']}
-                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                      tick={{ fontSize: 11, fill: '#9ca3af' }}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={(v: number) => v.toFixed(0)}
-                      width={50}
+                      tickFormatter={(v: number) => v.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
+                      width={60}
                     />
                     <Tooltip content={(props) => <ChartTooltip {...props} prices={chartData.prices} />} />
                     {firstClose && (

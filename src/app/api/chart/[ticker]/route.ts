@@ -1,5 +1,7 @@
 import { type NextRequest } from 'next/server'
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 export const dynamic = 'force-dynamic'
 
 type PricePoint = {
@@ -36,19 +38,11 @@ export async function GET(
   const { ticker } = await params
   const period = request.nextUrl.searchParams.get('period') ?? '3mo'
 
-  // Mapear período para intervalo Yahoo Finance
-  const intervalMap: Record<string, string> = {
-    '1wk': '1d',
-    '1mo': '1d',
-    '3mo': '1d',
-    '1y': '1wk',
-    '5y': '1mo',
-    'max': '1mo',
-  }
-  const interval = intervalMap[period] ?? '1d'
+  const actualRange = period === 'max' ? '25y' : period
+  const interval = period === 'max' ? '1wk' : '1d'
 
   try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=${period}&interval=${interval}&includePrePost=false`
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=${actualRange}&interval=${interval}&includePrePost=false`
 
     const res = await fetch(url, {
       headers: {

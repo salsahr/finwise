@@ -3,6 +3,7 @@ import { getAssets } from "@/app/actions/assets"
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Wallet, PieChart, TrendingUp, ArrowRight, Activity, DollarSign, Briefcase, BarChart2, Sparkles, BookOpen } from 'lucide-react'
+import { ExchangeRates } from '@/components/exchange-rates'
 
 export default async function DashboardPage() {
   const assets = await getAssets()
@@ -33,6 +34,9 @@ export default async function DashboardPage() {
           </Button>
         </Link>
       </div>
+
+      {/* Exchange Rates */}
+      <ExchangeRates />
 
       {/* Metrics Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
