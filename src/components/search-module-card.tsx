@@ -13,7 +13,7 @@ import { AssetSearch } from "@/components/asset-search";
 
 export function SearchModuleCard() {
   return (
-    // Dialog engloba o componente para gerenciar o estado de abrir/fechar do modal 
+    // Dialog engloba o componente para gerenciar o estado de abrir/fechar do modal  
     <Dialog>
         {/* Interface do Card */}
       <Card className="bg-[#121212] border-[#2A2A2A] flex flex-col justify-between hover:border-[#3A3A3A] transition-colors">
