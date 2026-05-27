@@ -1,17 +1,17 @@
 "use server"
 
 import { google } from '@ai-sdk/google';
+//import { anthropic } from '@ai-sdk/anthropic'; (se for usar claude alterar aqui e o modelo)
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { db } from "@/db";
 import { asset } from "@/db/schema"; 
-import { and, ilike } from "drizzle-orm"; // <-- Note que removemos o 'eq' e vamos usar 'ilike' para tudo
+import { and, ilike } from "drizzle-orm"; 
 
 export async function searchAssetsWithAI(userQuery: string) {
   const { object: filters } = await generateObject({
-    model: google('gemini-2.5-flash'), 
+    model: google('gemini-2.5-flash'), // modelo de IA para processar a consulta do usuário
     temperature: 0, 
-    // Atualizamos o System Prompt para a IA converter Bitcoin em BTC, Weg em WEGE3, etc.
     system: "Você é um assistente financeiro. Extraia filtros para o banco de dados. Regras: 1) O campo 'type' deve ser a categoria em português (ex: Ação, Cripto, Renda Fixa). 2) Se o usuário buscar o nome de uma empresa ou criptomoeda conhecida, converta o 'keyword' para o seu Ticker/Sigla de mercado (ex: 'Bitcoin' vira 'BTC', 'Weg' vira 'WEGE3').",
     prompt: userQuery,
     schema: z.object({
@@ -22,12 +22,10 @@ export async function searchAssetsWithAI(userQuery: string) {
 
   const conditions = [];
   
-  // Usar 'ilike' resolve o problema do "Cripto" vs "cripto"
   if (filters.type) {
     conditions.push(ilike(asset.type, `%${filters.type}%`));
   }
   
-  // Vai buscar por '%BTC%' e encontrar tanto 'BTC' quanto 'BTC-USD'
   if (filters.keyword) {
     conditions.push(ilike(asset.name, `%${filters.keyword}%`));
   }
